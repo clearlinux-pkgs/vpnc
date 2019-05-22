@@ -1,0 +1,5 @@
+101208be5b74039ea70b9e007ce0d6c9fbe44d82
+gnutls-dev
+libgcrypt-dev
+libgpg-error-dev
+pkgconfig(gnutls)
