@@ -4,22 +4,43 @@
 #
 Name     : vpnc
 Version  : 101208be5b74039ea70b9e007ce0d6c9fbe44d82
-Release  : 1
+Release  : 2
 URL      : https://github.com/streambinder/vpnc/archive/101208be5b74039ea70b9e007ce0d6c9fbe44d82.tar.gz
 Source0  : https://github.com/streambinder/vpnc/archive/101208be5b74039ea70b9e007ce0d6c9fbe44d82.tar.gz
 Summary  : VPN client for cisco3000 VPN Concentrators
 Group    : Development/Tools
 License  : GPL-3.0
+Requires: vpnc-bin = %{version}-%{release}
 Requires: vpnc-license = %{version}-%{release}
+Requires: vpnc-man = %{version}-%{release}
 BuildRequires : gnutls-dev
 BuildRequires : libgcrypt-dev
 BuildRequires : libgpg-error-dev
 BuildRequires : pkgconfig(gnutls)
+Patch1: build.patch
 
 %description
 # VPNC
 ## What is it
 VPNC is a VPN client compatible with Cisco's EasyVPN equipment. It supports IPSec (ESP) with Mode Configuration and Xauth. Supports only shared-secret IPSec authentication with Xauth, AES (256, 192, 128), 3DES, 1DES, MD5, SHA1, DH1/2/5 and IP tunneling. It runs entirely in userspace. Only "Universal TUN/TAP device driver support" is needed in kernel.
+
+%package bin
+Summary: bin components for the vpnc package.
+Group: Binaries
+Requires: vpnc-license = %{version}-%{release}
+
+%description bin
+bin components for the vpnc package.
+
+
+%package doc
+Summary: doc components for the vpnc package.
+Group: Documentation
+Requires: vpnc-man = %{version}-%{release}
+
+%description doc
+doc components for the vpnc package.
+
 
 %package license
 Summary: license components for the vpnc package.
@@ -29,15 +50,24 @@ Group: Default
 license components for the vpnc package.
 
 
+%package man
+Summary: man components for the vpnc package.
+Group: Default
+
+%description man
+man components for the vpnc package.
+
+
 %prep
 %setup -q -n vpnc-101208be5b74039ea70b9e007ce0d6c9fbe44d82
+%patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1558567678
+export SOURCE_DATE_EPOCH=1558568305
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$CFLAGS -fno-lto "
 export FFLAGS="$CFLAGS -fno-lto "
@@ -46,7 +76,7 @@ make  %{?_smp_mflags}
 
 
 %install
-export SOURCE_DATE_EPOCH=1558567678
+export SOURCE_DATE_EPOCH=1558568305
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/vpnc
 cp LICENSE %{buildroot}/usr/share/package-licenses/vpnc/LICENSE
@@ -55,6 +85,23 @@ cp LICENSE %{buildroot}/usr/share/package-licenses/vpnc/LICENSE
 %files
 %defattr(-,root,root,-)
 
+%files bin
+%defattr(-,root,root,-)
+/usr/bin/cisco-decrypt
+/usr/bin/pcf2vpnc
+/usr/bin/vpnc
+/usr/bin/vpnc-disconnect
+
+%files doc
+%defattr(0644,root,root,0755)
+%doc /usr/share/doc/vpnc/*
+
 %files license
 %defattr(0644,root,root,0755)
 /usr/share/package-licenses/vpnc/LICENSE
+
+%files man
+%defattr(0644,root,root,0755)
+/usr/share/man/man1/cisco-decrypt.1
+/usr/share/man/man1/pcf2vpnc.1
+/usr/share/man/man8/vpnc.8
