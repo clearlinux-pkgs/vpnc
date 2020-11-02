@@ -4,10 +4,10 @@
 #
 Name     : vpnc
 Version  : 101208be5b74039ea70b9e007ce0d6c9fbe44d82
-Release  : 2
+Release  : 3
 URL      : https://github.com/streambinder/vpnc/archive/101208be5b74039ea70b9e007ce0d6c9fbe44d82.tar.gz
 Source0  : https://github.com/streambinder/vpnc/archive/101208be5b74039ea70b9e007ce0d6c9fbe44d82.tar.gz
-Summary  : VPN client for cisco3000 VPN Concentrators
+Summary  : No detailed summary available
 Group    : Development/Tools
 License  : GPL-3.0
 Requires: vpnc-bin = %{version}-%{release}
@@ -60,26 +60,28 @@ man components for the vpnc package.
 
 %prep
 %setup -q -n vpnc-101208be5b74039ea70b9e007ce0d6c9fbe44d82
+cd %{_builddir}/vpnc-101208be5b74039ea70b9e007ce0d6c9fbe44d82
 %patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1558568305
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1604356440
+export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
-export FCFLAGS="$CFLAGS -fno-lto "
-export FFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$FFLAGS -fno-lto "
+export FFLAGS="$FFLAGS -fno-lto "
 export CXXFLAGS="$CXXFLAGS -fno-lto "
 make  %{?_smp_mflags}
 
 
 %install
-export SOURCE_DATE_EPOCH=1558568305
+export SOURCE_DATE_EPOCH=1604356440
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/vpnc
-cp LICENSE %{buildroot}/usr/share/package-licenses/vpnc/LICENSE
+cp %{_builddir}/vpnc-101208be5b74039ea70b9e007ce0d6c9fbe44d82/LICENSE %{buildroot}/usr/share/package-licenses/vpnc/12d81f50767d4e09aa7877da077ad9d1b915d75b
 %make_install
 
 %files
@@ -98,7 +100,7 @@ cp LICENSE %{buildroot}/usr/share/package-licenses/vpnc/LICENSE
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/vpnc/LICENSE
+/usr/share/package-licenses/vpnc/12d81f50767d4e09aa7877da077ad9d1b915d75b
 
 %files man
 %defattr(0644,root,root,0755)
